@@ -3,7 +3,6 @@ import 'package:musiconator/main.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
-
   @override
   State<Homepage> createState() => _HomepageState();
 }
@@ -13,14 +12,10 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(MyApp.title),
+        title: Text(MyApp.title),
       ),
       body: const Center(
-        child: Text('Hello World'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
-        child: const Icon(Icons.add),
+        child: Text("Hello World"),
       ),
     );
   }
