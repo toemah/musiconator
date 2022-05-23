@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:musiconator/homepage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:musiconator/sound.dart';
 import 'package:musiconator/soundWidget.dart';
@@ -56,3 +55,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+ 
