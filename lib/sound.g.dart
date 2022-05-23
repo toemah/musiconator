@@ -20,7 +20,7 @@ class SoundAdapter extends TypeAdapter<Sound> {
       id: fields[0] as int,
       name: fields[1] as String,
       path: fields[2] as String,
-      imagePath: fields[3] as String,
+      imagePath: fields[3] as String?,
       themeId: fields[4] as int,
     );
   }
