@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musiconator/homepage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:musiconator/sound.dart';
 import 'package:musiconator/soundWidget.dart';
@@ -47,12 +48,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: SoundWidget(
-        isAsset: true, 
-        name: (defaultThemes[1]["sounds"] as List<Map<String, String>>)[0]["name"] as String, 
-        path: (defaultThemes[1]["sounds"] as List<Map<String, String>>)[0]["asset"] as String, 
-        imagePath: ""
-      ),
+          isAsset: true,
+          name: (defaultThemes[1]["sounds"] as List<Map<String, String>>)[0]["name"] as String,
+          path: (defaultThemes[1]["sounds"] as List<Map<String, String>>)[0]["asset"] as String,
+          imagePath: ""),
     );
   }
 }
- 
