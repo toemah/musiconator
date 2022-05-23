@@ -15,7 +15,7 @@ class Sound {
   String path;
 
   @HiveField(3)
-  String imagePath;
+  String? imagePath;
 
   @HiveField(4)
   int themeId; 
