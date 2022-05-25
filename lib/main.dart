@@ -47,11 +47,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SoundWidget(
-          isAsset: true,
-          name: (defaultThemes[1]["sounds"] as List<Map<String, String>>)[0]["name"] as String,
-          path: (defaultThemes[1]["sounds"] as List<Map<String, String>>)[0]["asset"] as String,
-          imagePath: ""),
+      home: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Container(),
+      ),
     );
   }
 }
