@@ -24,7 +24,7 @@ class Sound {
     required this.id,
     required this.name,
     required this.path,
-    required this.imagePath,
+    this.imagePath,
     required this.themeId
   });
 }
