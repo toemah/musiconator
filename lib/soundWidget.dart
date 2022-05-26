@@ -30,6 +30,7 @@ class SoundWidget extends StatefulWidget {
 class _SoundWidgetState extends State<SoundWidget> {
   late var player =
       widget.isAsset ? AudioCache(prefix: MyApp.assetsPath) : AudioPlayer();
+  bool actionsVisibility = false;
 
   @override
   void initState() {
@@ -52,14 +53,26 @@ class _SoundWidgetState extends State<SoundWidget> {
     }
   }
 
-  Widget actionButton(String text, IconData icon, Function _onPressed) {
+  Widget actionButton(String text, IconData icon, Function() _onPressed) {
     return MaterialButton(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [Text(text), Icon(icon)],
       ),
-      onPressed: () => _onPressed,
+      onPressed: _onPressed,
     );
+  }
+
+  void showActions() {
+    setState(() {
+      actionsVisibility = true;
+    });
+  }
+
+  void hideActions() {
+    setState(() {
+      actionsVisibility = false;
+    });
   }
 
   @override
@@ -72,6 +85,7 @@ class _SoundWidgetState extends State<SoundWidget> {
           widget.imagePath == null
               ? ElevatedButton(
                   onPressed: play,
+                  onLongPress: showActions,
                   child: Center(
                     child: Text(
                       widget.name,
@@ -84,6 +98,8 @@ class _SoundWidgetState extends State<SoundWidget> {
                   ),
                 )
               : MaterialButton(
+                  onPressed: play,
+                  onLongPress: showActions,
                   child: Container(
                     child: Center(
                       child: Text(
@@ -107,37 +123,42 @@ class _SoundWidgetState extends State<SoundWidget> {
                       ),
                     ),
                   ),
-                  onPressed: play,
                 ),
-          Material(
-            child: Container(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: actionButton("Modifier", Icons.edit_outlined, () => {}),
-                    ),
-                    const Divider(),
-                    Expanded(
-                      flex: 1,
-                      child: actionButton("Supprimer", Icons.delete_outlined, () => {}),
-                    ),
-                    const Divider(),
-                    Expanded(
-                      flex: 1,
-                      child: actionButton("Annuler", Icons.cancel_outlined, () => {}),
-                    )
-                  ],
+          Visibility(
+            visible: actionsVisibility,
+            child: Material(
+              child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: actionButton(
+                            "Modifier", Icons.edit_outlined, () => {}),
+                      ),
+                      const Divider(),
+                      Expanded(
+                        flex: 1,
+                        child: actionButton(
+                            "Supprimer", Icons.delete_outlined, () => {}),
+                      ),
+                      const Divider(),
+                      Expanded(
+                        flex: 1,
+                        child: actionButton(
+                            "Annuler", Icons.cancel_outlined, hideActions),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              decoration: const BoxDecoration(
-                color: Colors.white,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
               ),
             ),
-          ),
+          )
         ],
       ),
     );
