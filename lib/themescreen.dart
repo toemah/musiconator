@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:musiconator/main.dart';
+import 'package:musiconator/soundtheme.dart';
 
 class ThemeScreen extends StatefulWidget {
-  
-  final int themeId;
-  final String themeName;
-  
+  final List<SoundTheme> themes;
+
   const ThemeScreen({
-    Key? key, 
-    required this.themeId,
-    required this.themeName
+    Key? key,
+    required this.themes,
   }) : super(key: key);
-  
+
   @override
   State<ThemeScreen> createState() => _ThemeScreenState();
-
 }
 
 class _ThemeScreenState extends State<ThemeScreen> {
@@ -25,7 +22,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
         title: const Text(MyApp.title),
       ),
       body: Center(
-        child: Text("[${widget.themeId}] ${widget.themeName}"),
+        child: Text("[${widget.themes[0].name}]"),
       ),
     );
   }
