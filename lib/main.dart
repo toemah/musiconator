@@ -25,26 +25,30 @@ class MyApp extends StatelessWidget {
   static const String assetsPath = "assets/audio/";
 
   static List<SoundTheme> defaultThemes = [
-    SoundTheme(id: -1, name: "explosion"),
-    SoundTheme(id: -2, name: "fun"),
-    SoundTheme(id: -3, name: "serious"),
+    SoundTheme(id: 0, name: "explosion"),
+    SoundTheme(id: 1, name: "fun"),
+    SoundTheme(id: 2, name: "serious"),
   ];
 
-  static List<Map<Object, Object>> defaultSounds = [
-    {
-      "themeId": -1,
-      "sounds": [
-        {"name": "default explosion", "asset": "explosion.mp3"}
-      ]
-    },
-    {
-      "themedId": -2,
-      "sounds": [
-        {"name": "flush", "asset": "flush.mp3"},
-        {"name": "splat", "asset": "splat.mp3"}
-      ]
-    },
-    {"themeId": -3, "sounds": []}
+  static List<Sound> defaultsSounds = [
+    Sound(
+      id: -1, 
+      name: "default explosion", 
+      path: "explosion.mp3", 
+      themeId: 0
+    ),
+    Sound(
+      id: -1, 
+      name: "flushing toilet", 
+      path: "flush.mp3", 
+      themeId: 1
+    ),
+    Sound(
+      id: -1,
+      name: "goop sound",
+      path: "splat.mp3",
+      themeId: 1
+    )
   ];
 
   @override
@@ -54,7 +58,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ThemeScreen(themes: defaultThemes),
+      home: Container(),
     );
   }
 }
