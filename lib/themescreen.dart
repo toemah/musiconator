@@ -1,22 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:musiconator/main.dart';
-import 'package:musiconator/soundtheme.dart';
+import 'package:musiconator/sound.dart';
+import 'package:musiconator/soundWidget.dart';
 
 class ThemeScreen extends StatefulWidget {
-  final List<SoundTheme> themes;
+  final int themeId;
+  final String themeName;
 
   const ThemeScreen({
     Key? key,
-    required this.themes,
+    required this.themeId,
+    required this.themeName,
   }) : super(key: key);
 
   @override
   State<ThemeScreen> createState() => _ThemeScreenState();
 }
 
-
-
 class _ThemeScreenState extends State<ThemeScreen> {
+  late List<Sound> sounds =
+      MyApp.defaultSounds.where((e) => e.themeId == widget.themeId).toList();
+
+  TextEditingController themeNameField = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      themeNameField.text = widget.themeName;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,32 +39,45 @@ class _ThemeScreenState extends State<ThemeScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Center(
-            child: Column(children : [
-              Row(mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [Padding(padding: EdgeInsets.only(top: 20),
-                      child: Text('THEME 1', style: TextStyle(fontSize: 20)))]),
-              Expanded(child: Scrollbar(child: Container(margin: const EdgeInsets.all(120.0),
-                child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 500,
-                        crossAxisSpacing: 20,
-                        mainAxisSpacing: 20),
-                    itemCount: 100,
-                    itemBuilder: (BuildContext ctx, index) {
-                      return Container(
-                        child:Stack(fit: StackFit.expand,
-                            children: [
-                              Image.asset('assets/images/image.jpeg', fit: BoxFit.cover), Align(alignment: Alignment.center, child: Text((index + 1).toString(), style: const TextStyle(fontSize: 100, color: Colors.purple)))]),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            color: Colors.black,
-                            border: Border.all(width: 10)),
-                      );
-                    }),)))])
-          // Text("[${widget.themeId}] ${widget.themeName}"),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextField(
+                  controller: themeNameField,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                  textAlign: TextAlign.center,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                ),
+                const Divider(),
+                Wrap(
+                  spacing: 10.0,
+                  runSpacing: 10.0,
+                  children: sounds
+                      .map(
+                        (e) => SizedBox(
+                          width: 200.0,
+                          height: 200.0,
+                          child: SoundWidget(
+                            isAsset: e.id == -1,
+                            soundId: e.id,
+                            name: e.name,
+                            path: e.path,
+                            imagePath: e.imagePath,
+                            themeId: e.themeId,
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ],
+            ),
+          ),
         ),
-      )
+      ),
     );
   }
 }
