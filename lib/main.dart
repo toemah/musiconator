@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:musiconator/sound.dart';
 import 'package:musiconator/soundWidget.dart';
 import 'package:musiconator/soundtheme.dart';
+import 'package:musiconator/themescreen.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -23,21 +24,27 @@ class MyApp extends StatelessWidget {
 
   static const String assetsPath = "assets/audio/";
 
-  static List<Map<Object, Object>> defaultThemes = [
+  static List<SoundTheme> defaultThemes = [
+    SoundTheme(id: -1, name: "explosion"),
+    SoundTheme(id: -2, name: "fun"),
+    SoundTheme(id: -3, name: "serious"),
+  ];
+
+  static List<Map<Object, Object>> defaultSounds = [
     {
-      "name": "explosion",
+      "themeId": -1,
       "sounds": [
         {"name": "default explosion", "asset": "explosion.mp3"}
       ]
     },
     {
-      "name": "fun",
+      "themedId": -2,
       "sounds": [
         {"name": "flush", "asset": "flush.mp3"},
         {"name": "splat", "asset": "splat.mp3"}
       ]
     },
-    {"name": "serious", "sounds": []}
+    {"themeId": -3, "sounds": []}
   ];
 
   @override
@@ -47,10 +54,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Container(),
-      ),
+      home: ThemeScreen(themes: defaultThemes),
     );
   }
 }
