@@ -54,32 +54,47 @@ class _SoundWidgetState extends State<SoundWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.imagePath == null
-        ? ElevatedButton(
-            onPressed: play,
-            child: Center(
-              child: Text(widget.name),
-            ),
-          )
-        : MaterialButton(
-            child: Container(
-              height: double.maxFinite,
-              width: double.maxFinite,
+    return ButtonTheme(
+      minWidth: 100.0,
+      height: 100.0,
+      child: widget.imagePath == null
+          ? ElevatedButton(
+              onPressed: play,
               child: Center(
                 child: Text(
                   widget.name,
-                  style: const TextStyle(color: Colors.white),),
-              ),
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: FileImage(
-                    File(widget.imagePath!),
-                  ),
-                  fit: BoxFit.cover,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize:
+                          Theme.of(context).textTheme.headline6!.fontSize),
+                  textAlign: TextAlign.center,
                 ),
               ),
+            )
+          : MaterialButton(
+              child: Container(
+                child: Center(
+                  child: Text(
+                    widget.name,
+                    style: TextStyle(
+                        color: Colors.white,
+                        backgroundColor: const Color.fromARGB(127, 0, 0, 0),
+                        fontSize:
+                            Theme.of(context).textTheme.headline6!.fontSize),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: FileImage(
+                      File(widget.imagePath!),
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              onPressed: play,
             ),
-            onPressed: play,
-          );
+    );
   }
 }
