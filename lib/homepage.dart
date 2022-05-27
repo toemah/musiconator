@@ -36,8 +36,7 @@ class _HomepageState extends State<Homepage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ThemeScreen(
-                      themeId: themes[index].id,
-                      themeName: themes[index].name,
+                      theme: themes[index],
                     ),
                   ),
                 ),

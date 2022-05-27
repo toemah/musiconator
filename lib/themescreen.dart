@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:musiconator/main.dart';
 import 'package:musiconator/sound.dart';
 import 'package:musiconator/soundWidget.dart';
+import 'package:musiconator/soundtheme.dart';
 
 class ThemeScreen extends StatefulWidget {
-  final int themeId;
-  final String themeName;
+  final SoundTheme theme;
 
   const ThemeScreen({
     Key? key,
-    required this.themeId,
-    required this.themeName,
+    required this.theme
   }) : super(key: key);
 
   @override
@@ -18,8 +17,8 @@ class ThemeScreen extends StatefulWidget {
 }
 
 class _ThemeScreenState extends State<ThemeScreen> {
-  late List<Sound> sounds =
-      MyApp.sounds.where((e) => e.themeId == widget.themeId).toList();
+  late SoundTheme theme = widget.theme;
+  late List<Sound> sounds = MyApp.sounds.where((e) => e.themeId == theme.id).toList();
 
   TextEditingController themeNameField = TextEditingController();
 
@@ -27,7 +26,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
   void initState() {
     super.initState();
     setState(() {
-      themeNameField.text = widget.themeName;
+      themeNameField.text = theme.name;
     });
   }
 
@@ -62,11 +61,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                         height: 200.0,
                         child: SoundWidget(
                           isAsset: e.id == -1,
-                          soundId: e.id,
-                          name: e.name,
-                          path: e.path,
-                          imagePath: e.imagePath,
-                          themeId: e.themeId,
+                          sound: e,
                         ),
                       ),
                     )

@@ -3,24 +3,13 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:musiconator/main.dart';
+import 'package:musiconator/sound.dart';
 
 class SoundWidget extends StatefulWidget {
   final bool isAsset;
-  final int? soundId;
-  final String name;
-  final String path;
-  final String? imagePath;
-  final int? themeId;
+  final Sound sound;
 
-  const SoundWidget(
-      {Key? key,
-      this.isAsset = false,
-      this.soundId, // if isAsset then soundId is null
-      required this.name,
-      required this.path,
-      this.imagePath,
-      this.themeId // if isAsset then themeId is null
-      })
+  const SoundWidget({Key? key, this.isAsset = false, required this.sound})
       : super(key: key);
 
   @override
@@ -28,8 +17,10 @@ class SoundWidget extends StatefulWidget {
 }
 
 class _SoundWidgetState extends State<SoundWidget> {
-  late var player =
-      widget.isAsset ? AudioCache(prefix: MyApp.assetsPath) : AudioPlayer();
+  late Sound sound = widget.sound;
+  late var player = widget.isAsset 
+                    ? AudioCache(prefix: MyApp.assetsPath) 
+                    : AudioPlayer();
   bool actionsVisibility = false;
 
   @override
@@ -47,9 +38,9 @@ class _SoundWidgetState extends State<SoundWidget> {
 
   void play() async {
     if (player is AudioCache) {
-      (player as AudioCache).play(widget.path);
+      (player as AudioCache).play(sound.path);
     } else {
-      await (player as AudioPlayer).play(widget.path, isLocal: true);
+      await (player as AudioPlayer).play(sound.path, isLocal: true);
     }
   }
 
@@ -82,13 +73,13 @@ class _SoundWidgetState extends State<SoundWidget> {
       height: 100.0,
       child: Stack(
         children: [
-          widget.imagePath == null
+          sound.imagePath == null
               ? ElevatedButton(
                   onPressed: play,
                   onLongPress: showActions,
                   child: Center(
                     child: Text(
-                      widget.name,
+                      sound.name,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize:
@@ -103,7 +94,7 @@ class _SoundWidgetState extends State<SoundWidget> {
                   child: Container(
                     child: Center(
                       child: Text(
-                        widget.name,
+                        sound.name,
                         style: TextStyle(
                             color: Colors.white,
                             backgroundColor: const Color.fromARGB(127, 0, 0, 0),
@@ -117,7 +108,7 @@ class _SoundWidgetState extends State<SoundWidget> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: FileImage(
-                          File(widget.imagePath!),
+                          File(sound.imagePath!),
                         ),
                         fit: BoxFit.cover,
                       ),
