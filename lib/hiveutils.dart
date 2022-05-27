@@ -38,7 +38,7 @@ class HiveUtils {
 
   static addTheme(String name) {
     soundThemeBox.add(SoundTheme(
-      id: soundThemeBox.length + MyApp.defaultThemes.length,
+      id: soundThemeBox.length + MyApp.themes.length,
       name: name,
     ));
   }
