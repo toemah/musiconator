@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:musiconator/main.dart';
 import 'package:musiconator/soundtheme.dart';
+import 'package:musiconator/themescreen.dart';
 
 class Homepage extends StatefulWidget {
   final List<SoundTheme> themes;
@@ -15,47 +16,60 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  late List<SoundTheme> themes = widget.themes;
+
   @override
-    
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(MyApp.title),
       ),
       body: Padding(
-        padding : const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         child: ListView.builder(
-          itemCount: widget.themes.length ,
+          itemCount: themes.length,
           itemBuilder: (context, index) {
-            return ListTile(
-              title: Text( "theme "+ index.toString() + " : " + widget.themes[index].name ),
-              onTap: () => {}, //ajouter la fonction pour aller dans un th�me 
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                icon:const Icon(Icons.edit),
-                onPressed: () { },
-                
-                ), 
-              ]
-              )
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: ElevatedButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ThemeScreen(
+                      themeId: themes[index].id,
+                      themeName: themes[index].name,
+                    ),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                  child: Text(
+                    themes[index].name,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize:
+                          Theme.of(context).textTheme.headlineSmall!.fontSize,
+                    ),
+                  ),
+                ),
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                  ),
+                ),
+              ),
             );
           },
         ),
-        
       ),
-      floatingActionButton: FloatingActionButton.extended(  
-        icon : const Icon(Icons.add),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.add),
         label: const Text('Theme'),
-        backgroundColor: Colors.blue,  
-        foregroundColor: Colors.white,  
-        onPressed: () => {
-          widget.themes.add(
-            SoundTheme(id: -1, name: "explosion")//ajouter la modal pour cr�er un th�me
-          )
-        },  
-      ),  
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        onPressed: () => {},
+      ),
     );
   }
 }
