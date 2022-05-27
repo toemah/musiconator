@@ -19,7 +19,7 @@ class ThemeScreen extends StatefulWidget {
 
 class _ThemeScreenState extends State<ThemeScreen> {
   late List<Sound> sounds =
-      MyApp.defaultSounds.where((e) => e.themeId == widget.themeId).toList();
+      MyApp.sounds.where((e) => e.themeId == widget.themeId).toList();
 
   TextEditingController themeNameField = TextEditingController();
 
@@ -39,42 +39,40 @@ class _ThemeScreenState extends State<ThemeScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextField(
-                  controller: themeNameField,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                  textAlign: TextAlign.center,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                  ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: themeNameField,
+                style: Theme.of(context).textTheme.headlineMedium,
+                textAlign: TextAlign.center,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
                 ),
-                const Divider(),
-                Wrap(
-                  spacing: 10.0,
-                  runSpacing: 10.0,
-                  children: sounds
-                      .map(
-                        (e) => SizedBox(
-                          width: 200.0,
-                          height: 200.0,
-                          child: SoundWidget(
-                            isAsset: e.id == -1,
-                            soundId: e.id,
-                            name: e.name,
-                            path: e.path,
-                            imagePath: e.imagePath,
-                            themeId: e.themeId,
-                          ),
+              ),
+              const Divider(),
+              Wrap(
+                spacing: 10.0,
+                runSpacing: 10.0,
+                children: sounds
+                    .map(
+                      (e) => SizedBox(
+                        width: 200.0,
+                        height: 200.0,
+                        child: SoundWidget(
+                          isAsset: e.id == -1,
+                          soundId: e.id,
+                          name: e.name,
+                          path: e.path,
+                          imagePath: e.imagePath,
+                          themeId: e.themeId,
                         ),
-                      )
-                      .toList(),
-                ),
-              ],
-            ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
           ),
         ),
       ),
