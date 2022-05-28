@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:musiconator/main.dart';
 import 'package:musiconator/sound.dart';
 import 'package:musiconator/soundWidget.dart';
+import 'package:musiconator/soundscreen.dart';
 import 'package:musiconator/soundtheme.dart';
 
 class ThemeScreen extends StatefulWidget {
@@ -77,6 +78,13 @@ class _ThemeScreenState extends State<ThemeScreen> {
             ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.add),
+        label: const Text('Son'),
+        onPressed: () => {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const SoundScreen()))
+        },
       ),
     );
   }
