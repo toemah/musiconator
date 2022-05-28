@@ -223,6 +223,21 @@ class _SoundScreenState extends State<SoundScreen> {
                       ),
                     ),
                   ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: MyApp.spacing),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () => {},
+                          child: Text(
+                            sound != null ? "Confirmer" : "Ajouter",
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
