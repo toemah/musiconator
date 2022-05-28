@@ -44,13 +44,15 @@ class _SoundWidgetState extends State<SoundWidget> {
     }
   }
 
-  Widget actionButton(String text, IconData icon, Function() _onPressed) {
+  Widget actionButton(String text, IconData icon, Function()? _onPressed) {
     return MaterialButton(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [Text(text), Icon(icon)],
       ),
       onPressed: _onPressed,
+      disabledColor: Colors.grey.shade200,
+      disabledTextColor: Colors.grey,
     );
   }
 
@@ -135,15 +137,13 @@ class _SoundWidgetState extends State<SoundWidget> {
             visible: actionsVisibility,
             child: Material(
               child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  child: Column(
+                child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Expanded(
                         flex: 1,
                         child: actionButton(
-                            "Modifier", Icons.edit_outlined, editAction),
+                            "Modifier", Icons.edit_outlined, widget.isAsset ? null : editAction),
                       ),
                       const Divider(),
                       Expanded(
@@ -159,7 +159,6 @@ class _SoundWidgetState extends State<SoundWidget> {
                       )
                     ],
                   ),
-                ),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                 ),
