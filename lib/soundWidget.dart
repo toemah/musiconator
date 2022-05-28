@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:musiconator/main.dart';
 import 'package:musiconator/sound.dart';
+import 'package:musiconator/soundscreen.dart';
 
 class SoundWidget extends StatefulWidget {
   final bool isAsset;
@@ -18,9 +19,8 @@ class SoundWidget extends StatefulWidget {
 
 class _SoundWidgetState extends State<SoundWidget> {
   late Sound sound = widget.sound;
-  late var player = widget.isAsset 
-                    ? AudioCache(prefix: MyApp.assetsPath) 
-                    : AudioPlayer();
+  late var player =
+      widget.isAsset ? AudioCache(prefix: MyApp.assetsPath) : AudioPlayer();
   bool actionsVisibility = false;
 
   @override
@@ -64,6 +64,22 @@ class _SoundWidgetState extends State<SoundWidget> {
     setState(() {
       actionsVisibility = false;
     });
+  }
+
+  void editAction() {
+    hideActions();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SoundScreen(
+          sound: sound,
+        ),
+      ),
+    );
+  }
+
+  void cancelAction() {
+    hideActions();
   }
 
   @override
@@ -127,7 +143,7 @@ class _SoundWidgetState extends State<SoundWidget> {
                       Expanded(
                         flex: 1,
                         child: actionButton(
-                            "Modifier", Icons.edit_outlined, () => {}),
+                            "Modifier", Icons.edit_outlined, editAction),
                       ),
                       const Divider(),
                       Expanded(
@@ -139,7 +155,7 @@ class _SoundWidgetState extends State<SoundWidget> {
                       Expanded(
                         flex: 1,
                         child: actionButton(
-                            "Annuler", Icons.cancel_outlined, hideActions),
+                            "Annuler", Icons.cancel_outlined, cancelAction),
                       )
                     ],
                   ),
