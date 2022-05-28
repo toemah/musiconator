@@ -17,6 +17,11 @@ class _SoundScreenState extends State<SoundScreen> {
   late Sound? sound = widget.sound;
   TextEditingController soundNameField = TextEditingController();
 
+  late Function()? audioBtnFromSoundbank =
+      sound != null && sound!.id == -1 ? addFromSoundbank : null;
+  late Function()? audioBtnFromDevice =
+      sound != null && sound!.id != -1 ? addFromDevice : null;
+
   @override
   void initState() {
     super.initState();
@@ -26,6 +31,10 @@ class _SoundScreenState extends State<SoundScreen> {
     });
   }
 
+  void addFromSoundbank() {}
+
+  void addFromDevice() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,11 +43,13 @@ class _SoundScreenState extends State<SoundScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(MyApp.spacing),
-        child: Center(
+        child: Align(
+          alignment: Alignment.topCenter,
           child: SingleChildScrollView(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: MyApp.maxWidth),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextField(
                     controller: soundNameField,
@@ -49,6 +60,14 @@ class _SoundScreenState extends State<SoundScreen> {
                     ),
                   ),
                   const Divider(),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: MyApp.spacing, bottom: MyApp.spacing),
+                    child: Text(
+                      "Image",
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                  ),
                   AspectRatio(
                     aspectRatio: 1,
                     child: Container(
@@ -59,8 +78,7 @@ class _SoundScreenState extends State<SoundScreen> {
                         ),
                       ),
                       decoration: sound == null || sound!.imagePath == null
-                          ? BoxDecoration(
-                              color: Theme.of(context).backgroundColor)
+                          ? BoxDecoration(color: Theme.of(context).primaryColor)
                           : BoxDecoration(
                               image: DecorationImage(
                                 image: FileImage(
@@ -108,22 +126,100 @@ class _SoundScreenState extends State<SoundScreen> {
                     ),
                   ),
                   Padding(
+                    padding: const EdgeInsets.only(
+                      top: MyApp.spacing,
+                    ),
+                    child: Text(
+                      "Audio",
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.fromLTRB(2.0, 5.0, 2.0, 0),
                     child: SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () => {},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              sound != null ? sound!.path : "Ajouter un son",
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 2.0, right: 2.0),
+                              child: ElevatedButton(
+                                onPressed: audioBtnFromSoundbank,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        audioBtnFromSoundbank != null
+                                            ? sound!.path
+                                            : "Ajouter un son depuis l'appareil",
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    const Icon(Icons.folder_open_outlined),
+                                  ],
+                                ),
+                              ),
                             ),
-                            const Icon(
-                              Icons.add_circle_outline,
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 2.0, right: 2.0),
+                            child: ElevatedButton(
+                              onPressed: audioBtnFromSoundbank != null
+                                  ? () => {}
+                                  : null,
+                              child: const Icon(Icons.remove),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(2.0, 5.0, 2.0, 0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 2.0, right: 2.0),
+                              child: ElevatedButton(
+                                onPressed: audioBtnFromDevice,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        audioBtnFromDevice != null
+                                            ? sound!.path
+                                            : "Ajouter un son depuis l'appareil",
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    const Icon(Icons.folder_open_outlined),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 2.0, right: 2.0),
+                            child: ElevatedButton(
+                              onPressed:
+                                  audioBtnFromDevice != null ? () => {} : null,
+                              child: const Icon(Icons.remove),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
