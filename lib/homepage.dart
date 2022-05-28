@@ -3,6 +3,8 @@ import 'package:musiconator/main.dart';
 import 'package:musiconator/soundtheme.dart';
 import 'package:musiconator/themescreen.dart';
 
+import 'hiveutils.dart';
+
 class Homepage extends StatefulWidget {
   final List<SoundTheme> themes;
 
@@ -15,7 +17,62 @@ class Homepage extends StatefulWidget {
   State<Homepage> createState() => _HomepageState();
 }
 
+
+  Future<void> _createItem(Map<String, dynamic> newItem) async {
+    /*await widget.themes.add(newItem);
+    _refreshItems(); // update the UI*/
+    
+  }
+
+
+
 class _HomepageState extends State<Homepage> {
+
+    final TextEditingController _nameController = TextEditingController();
+    void _showForm(BuildContext ctx, int? itemKey, List themes ) async {
+    showModalBottomSheet(
+        context: ctx,
+        elevation: 5,
+        isScrollControlled: true,
+        builder: (_) => Container(
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(ctx).viewInsets.bottom,
+              top: 15,
+              left: 15,
+              right: 15),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextField(
+                controller: _nameController,
+                decoration: const InputDecoration(hintText: 'Nom du theme'),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              
+              ElevatedButton(
+                onPressed: () async {
+
+                  themes.add(SoundTheme(id: 4, name: _nameController.text));
+                  HiveUtils.addTheme( _nameController.text);
+                  setState(() {});
+                  _nameController.text = '';
+                  Navigator.of(ctx).pop(); // Close the bottom sheet
+                },
+                child: Text(itemKey == null ? 'Valider' : 'Update'),
+              ),
+              const SizedBox(
+                height: 10,
+              )
+            ],
+          ),
+        ));
+
+  }
+
+
   late List<SoundTheme> themes = widget.themes;
 
   @override
@@ -67,7 +124,10 @@ class _HomepageState extends State<Homepage> {
         label: const Text('Theme'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
-        onPressed: () => {},
+        onPressed: () => {
+          _showForm(context, null, themes)
+          //setState(() =>  _showForm(context, null, themes))
+          },
       ),
     );
   }
