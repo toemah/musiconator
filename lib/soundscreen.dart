@@ -2,21 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:musiconator/main.dart';
+import 'package:musiconator/sound.dart';
 
 class SoundScreen extends StatefulWidget {
-  final int soundId;
-  final String soundName;
-  final String path;
-  final String? imagePath;
-  final int themeId;
+  final Sound sound;
 
-  const SoundScreen(
-      {Key? key,
-      required this.soundId,
-      required this.soundName,
-      required this.path,
-      this.imagePath,
-      required this.themeId})
+  const SoundScreen({Key? key, required this.sound})
       : super(key: key);
 
   @override
@@ -24,6 +15,9 @@ class SoundScreen extends StatefulWidget {
 }
 
 class _SoundScreenState extends State<SoundScreen> {
+
+  late Sound sound = widget.sound;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,11 +52,11 @@ class _SoundScreenState extends State<SoundScreen> {
                 Container(
                   width: 200,
                   height: 200,
-                  decoration: widget.imagePath != null
+                  decoration: sound.imagePath != null
                       ? BoxDecoration(
                           image: DecorationImage(
                             image: FileImage(
-                              File(widget.imagePath!),
+                              File(sound.imagePath!),
                             ),
                             fit: BoxFit.cover,
                           ),
@@ -75,7 +69,7 @@ class _SoundScreenState extends State<SoundScreen> {
                   height: 35,
                 ),
                 Text(
-                  "Votre son est [${widget.soundId}] ${widget.soundName}",
+                  "Votre son est [${sound.id}] ${sound.name}",
                   style: const TextStyle(
                       fontSize: 18, color: Colors.white, letterSpacing: 2),
                 ),
