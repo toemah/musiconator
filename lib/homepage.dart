@@ -49,6 +49,12 @@ class _HomepageState extends State<Homepage> {
             ),
             ElevatedButton(
               onPressed: () async {
+                themes.add(
+                  SoundTheme(
+                    id: themes.length,
+                    name: _nameController.text,
+                  ),
+                );
                 HiveUtils.addTheme(_nameController.text);
                 setState(() {});
                 _nameController.text = '';
