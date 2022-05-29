@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:musiconator/main.dart';
 import 'package:musiconator/sound.dart';
@@ -16,6 +17,7 @@ class SoundScreen extends StatefulWidget {
 class _SoundScreenState extends State<SoundScreen> {
   late Sound? sound = widget.sound;
   TextEditingController soundNameField = TextEditingController();
+  TextEditingController imageNameField = TextEditingController();
 
   late Function()? audioBtnFromSoundbank =
       sound != null && sound!.id == -1 ? addFromSoundbank : null;
@@ -28,12 +30,43 @@ class _SoundScreenState extends State<SoundScreen> {
     setState(() {
       soundNameField.text =
           sound != null ? sound!.name : "Son ${MyApp.sounds.length}";
+      imageNameField.text = 'C:/Users/Florent/Downloads/image.jpg';
     });
   }
 
   void addFromSoundbank() {}
 
-  void addFromDevice() {}
+  Future<void> addFromDevice() async {
+    print('b');
+  }
+
+  Future<void> addSoundFromDevice() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['mp3', 'wav', 'flac'],
+    );
+
+    if (result?.files.first != null && result != null) {
+      soundNameField.text = result.files.first.name;
+      print(result.files.first.path);
+    }
+  }
+
+  Future<void> addImageFromDevice() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png'],
+    );
+
+    if(result != null) {
+      File file = File(result.files.single.path!);
+      print(result.files.first.path);
+      imageNameField.text = result.files.first.path!;
+      print(imageNameField);
+    } else {
+      // User canceled the picker
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +104,17 @@ class _SoundScreenState extends State<SoundScreen> {
                   AspectRatio(
                     aspectRatio: 1,
                     child: Container(
-                      child: const FittedBox(
-                        child: Icon(
+                      child: FittedBox(
+                        child:
+                        Icon(
                           Icons.image_not_supported_outlined,
                           color: Colors.white,
                         ),
+/*
+                        Image.file(
+                          File(imageNameField.text),
+                          fit: BoxFit.cover,
+                        ) */
                       ),
                       decoration: sound == null || sound!.imagePath == null
                           ? BoxDecoration(color: Theme.of(context).primaryColor)
@@ -111,7 +150,7 @@ class _SoundScreenState extends State<SoundScreen> {
                             padding:
                                 const EdgeInsets.only(left: 2.0, right: 2.0),
                             child: ElevatedButton(
-                              onPressed: () => {},
+                              onPressed: () => {addImageFromDevice()},
                               child: Text(
                                 sound == null ||
                                         (sound != null &&
@@ -191,7 +230,7 @@ class _SoundScreenState extends State<SoundScreen> {
                               padding:
                                   const EdgeInsets.only(left: 2.0, right: 2.0),
                               child: ElevatedButton(
-                                onPressed: audioBtnFromDevice,
+                                onPressed:() { addSoundFromDevice(); },
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
