@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:musiconator/main.dart';
 import 'package:musiconator/sound.dart';
+import 'package:musiconator/soundtheme.dart';
 
 class SoundScreen extends StatefulWidget {
   final Sound? sound;
@@ -16,13 +18,15 @@ class SoundScreen extends StatefulWidget {
 
 class _SoundScreenState extends State<SoundScreen> {
   late Sound? sound = widget.sound;
+  SoundTheme? dropdownSoundThemeValue;
+  Sound? dropdownSoundValue;
   TextEditingController soundNameField = TextEditingController();
   TextEditingController imageNameField = TextEditingController();
+  bool soundFromBank = false;
+  double imageWidth = 200.0;
 
-  late Function()? audioBtnFromSoundbank =
-      sound != null && sound!.id == -1 ? addFromSoundbank : null;
-  late Function()? audioBtnFromDevice =
-      sound != null && sound!.id != -1 ? addFromDevice : null;
+  late Function()? audioBtnFromSoundbank = addSoundFromSoundbank;
+  late Function()? audioBtnFromDevice = addSoundFromDevice;
 
   @override
   void initState() {
@@ -34,10 +38,8 @@ class _SoundScreenState extends State<SoundScreen> {
     });
   }
 
-  void addFromSoundbank() {}
+  Future<void> addSoundFromSoundbank() async {
 
-  Future<void> addFromDevice() async {
-    print('b');
   }
 
   Future<void> addSoundFromDevice() async {
@@ -58,7 +60,7 @@ class _SoundScreenState extends State<SoundScreen> {
       allowedExtensions: ['jpg', 'jpeg', 'png'],
     );
 
-    if(result != null) {
+    if (result != null) {
       File file = File(result.files.single.path!);
       print(result.files.first.path);
       imageNameField.text = result.files.first.path!;
@@ -78,207 +80,206 @@ class _SoundScreenState extends State<SoundScreen> {
         padding: const EdgeInsets.all(MyApp.spacing),
         child: Align(
           alignment: Alignment.topCenter,
-          child: SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: MyApp.maxWidth),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextField(
-                    controller: soundNameField,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                    textAlign: TextAlign.center,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                    ),
-                  ),
-                  const Divider(),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        top: MyApp.spacing, bottom: MyApp.spacing),
-                    child: Text(
-                      "Image",
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                  ),
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: Container(
-                      child: FittedBox(
-                        child:
-                        Icon(
-                          Icons.image_not_supported_outlined,
-                          color: Colors.white,
-                        ),
-/*
-                        Image.file(
-                          File(imageNameField.text),
-                          fit: BoxFit.cover,
-                        ) */
+          child: SizedBox(
+            width: MyApp.maxWidth,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    TextField(
+                      controller: soundNameField,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                      textAlign: TextAlign.center,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
                       ),
-                      decoration: sound == null || sound!.imagePath == null
-                          ? BoxDecoration(color: Theme.of(context).primaryColor)
-                          : BoxDecoration(
-                              image: DecorationImage(
-                                image: FileImage(
-                                  File(sound!.imagePath!),
-                                ),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    const Divider(),
+                    Wrap(
+                      alignment:
+                          MediaQuery.of(context).size.width < MyApp.maxWidth
+                              ? WrapAlignment.center
+                              : WrapAlignment.start,
+                      spacing: MyApp.spacing,
+                      runSpacing: MyApp.spacing,
                       children: [
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 2.0, right: 2.0),
-                            child: ElevatedButton(
-                              onPressed: () => {},
-                              child: const Text("Supprimer"),
+                        SizedBox(
+                          height: imageWidth,
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: Container(
+                              child: Container(
+                                child: const FittedBox(
+                                  child: Icon(
+                                    Icons.image_outlined,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                decoration: const BoxDecoration(
+                                  color: Color.fromARGB(127, 0, 0, 0),
+                                ),
+                              ),
+                              decoration:
+                                  sound == null || sound!.imagePath == null
+                                      ? BoxDecoration(
+                                          color: Theme.of(context).primaryColor)
+                                      : BoxDecoration(
+                                          image: DecorationImage(
+                                            image: FileImage(
+                                              File(sound!.imagePath!),
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
                             ),
                           ),
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 2.0, right: 2.0),
-                            child: ElevatedButton(
-                              onPressed: () => {addImageFromDevice()},
-                              child: Text(
-                                sound == null ||
-                                        (sound != null &&
-                                            sound!.imagePath == null)
-                                    ? "Ajouter"
-                                    : "Modifier",
+                        SizedBox(
+                          width:
+                              MediaQuery.of(context).size.width < MyApp.maxWidth
+                                  ? double.maxFinite
+                                  : MyApp.maxWidth - imageWidth - MyApp.spacing,
+                          height: imageWidth,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Wrap(
+                                runSpacing: MyApp.spacing,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Flexible(
+                                        child: Text(
+                                          "Choisir depuis un son depuis la biblithèque ?",
+                                          overflow: TextOverflow.visible,
+                                        ),
+                                      ),
+                                      Checkbox(
+                                        value: soundFromBank,
+                                        onChanged: (bool? value) {
+                                          setState(
+                                            () {
+                                              soundFromBank = value!;
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  Stack(
+                                    children: [
+                                      Visibility(
+                                        visible: !soundFromBank,
+                                        child: ElevatedButton(
+                                          onPressed: audioBtnFromSoundbank,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  sound != null
+                                                      ? sound!.path
+                                                      : "Ajouter un son depuis l'appareil",
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              const Icon(
+                                                  Icons.folder_open_outlined),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible: soundFromBank,
+                                        child: Column(
+                                          children: [
+                                            DropdownButton<SoundTheme>(
+                                              isExpanded: true,
+                                              value: dropdownSoundThemeValue,
+                                              hint: const Text(
+                                                "Sélectionnez un thème",
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              items:
+                                                  MyApp.defaultThemes.map((e) {
+                                                return DropdownMenuItem<
+                                                    SoundTheme>(
+                                                  value: e,
+                                                  child: Text(e.name),
+                                                );
+                                              }).toList(),
+                                              onChanged: (SoundTheme? value) {
+                                                setState(
+                                                  () {
+                                                    dropdownSoundThemeValue =
+                                                        value!;
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                            DropdownButton<Sound>(
+                                              isExpanded: true,
+                                              value: dropdownSoundValue,
+                                              hint: const Text(
+                                                "Sélectionnez un son",
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              items: dropdownSoundThemeValue !=
+                                                      null
+                                                  ? MyApp.defaultSounds
+                                                      .where((e) =>
+                                                          e.themeId ==
+                                                          dropdownSoundThemeValue!
+                                                              .id)
+                                                      .map((e) {
+                                                      return DropdownMenuItem<
+                                                          Sound>(
+                                                        value: e,
+                                                        child: Text(e.name),
+                                                      );
+                                                    }).toList()
+                                                  : null,
+                                              onChanged: (Sound? value) {
+                                                setState(
+                                                  () {
+                                                    dropdownSoundValue = value!;
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                            ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: MyApp.spacing,
-                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => {},
                     child: Text(
-                      "Audio",
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      sound != null ? "Confirmer" : "Ajouter",
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(2.0, 5.0, 2.0, 0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 2.0, right: 2.0),
-                              child: ElevatedButton(
-                                onPressed: audioBtnFromSoundbank,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        audioBtnFromSoundbank != null
-                                            ? sound!.path
-                                            : "Ajouter un son depuis l'appareil",
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    const Icon(Icons.folder_open_outlined),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 2.0, right: 2.0),
-                            child: ElevatedButton(
-                              onPressed: audioBtnFromSoundbank != null
-                                  ? () => {}
-                                  : null,
-                              child: const Icon(Icons.remove),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(2.0, 5.0, 2.0, 0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 2.0, right: 2.0),
-                              child: ElevatedButton(
-                                onPressed:() { addSoundFromDevice(); },
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        audioBtnFromDevice != null
-                                            ? sound!.path
-                                            : "Ajouter un son depuis l'appareil",
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    const Icon(Icons.folder_open_outlined),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 2.0, right: 2.0),
-                            child: ElevatedButton(
-                              onPressed:
-                                  audioBtnFromDevice != null ? () => {} : null,
-                              child: const Icon(Icons.remove),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: MyApp.spacing),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () => {},
-                          child: Text(
-                            sound != null ? "Confirmer" : "Ajouter",
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
