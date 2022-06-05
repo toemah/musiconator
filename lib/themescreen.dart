@@ -71,20 +71,19 @@ class _ThemeScreenState extends State<ThemeScreen> {
               }
               backToHomepage();
             },
-            child:Container(
+            child: Container(
               padding: const EdgeInsets.all(5.0),
               decoration: BoxDecoration(
-                color: Colors.red,
-              border: Border.all(
-                color: Colors.red,
-                width: 2.0,
-                style: BorderStyle.solid),
-                //Border.all
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
-              ), //BorderRadius.all
+                color: Colors.red.shade700,
+                border: Border.all(
+                  color: Colors.red.shade700,
+                  width: 2.0,
+                  style: BorderStyle.solid,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(10),
+                ),
               ),
-              
               child: Text(
                 "Supprimer le thème",
                 style: TextStyle(
@@ -137,8 +136,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.add),
-        label: const Text('Son'),
+        label: const Text('Ajouter un Son'),
         onPressed: () => {
           Navigator.of(context).push(
             MaterialPageRoute(
