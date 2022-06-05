@@ -87,16 +87,16 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData.from(
         colorScheme: ColorScheme(
           brightness: Brightness.light,
-          primary: Color.fromARGB(255, 15, 145, 251),
-          onPrimary: Colors.white,
-          secondary: Color.fromARGB(255, 0, 138, 250),
-          onSecondary: Colors.white,
-          error: Colors.red,
-          onError: Colors.red.shade700,
+          primary: Colors.lightBlue.shade600,
+          onPrimary: Colors.grey.shade100,
+          secondary: const Color.fromARGB(127, 39, 39, 39),
+          onSecondary: Colors.grey.shade100,
+          error: Colors.red.shade500,
+          onError: Colors.grey.shade900,
           background: ThemeData.dark().scaffoldBackgroundColor,
-          onBackground: ThemeData.dark().backgroundColor,
-          surface: Colors.blueGrey,
-          onSurface: Colors.white,
+          onBackground: Colors.grey.shade100,
+          surface: ThemeData.dark().colorScheme.surface,
+          onSurface: Colors.grey.shade100,
         ),
         textTheme: Theme.of(context)
             .textTheme
