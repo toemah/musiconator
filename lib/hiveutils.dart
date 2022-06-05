@@ -58,7 +58,6 @@ class HiveUtils {
 
   static deleteSound(int id) {
     if (soundBox.getAt(id) != null) {
-      soundBox.deleteAt(id);
       if (id + 1 < soundBox.length) {
         for (var i = id + 1; i < soundBox.length; i++) {
           Sound sound = soundBox.getAt(i)!;
@@ -76,6 +75,7 @@ class HiveUtils {
           );
         }
       }
+      soundBox.deleteAt(id);
     }
   }
 
