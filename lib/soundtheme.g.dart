@@ -19,17 +19,23 @@ class SoundThemeAdapter extends TypeAdapter<SoundTheme> {
     return SoundTheme(
       id: fields[0] as int,
       name: fields[1] as String,
+      isDefault: fields[2] as bool,
+      hide: fields[3] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, SoundTheme obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.name);
+      ..write(obj.name)
+      ..writeByte(2)
+      ..write(obj.isDefault)
+      ..writeByte(3)
+      ..write(obj.hide);
   }
 
   @override

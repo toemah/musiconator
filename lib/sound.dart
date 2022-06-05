@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:hive/hive.dart';
 
 part 'sound.g.dart';
@@ -6,25 +8,33 @@ part 'sound.g.dart';
 class Sound {
   
   @HiveField(0)
-  int id;
+  int? id;
 
   @HiveField(1)
   String name;
 
   @HiveField(2)
-  String path;
+  Uint8List? audioBytes;
 
   @HiveField(3)
-  String? imagePath;
+  String? audioPath;
 
   @HiveField(4)
-  int themeId; 
+  Uint8List? imageBytes;
+
+  @HiveField(5)
+  int themeId;
+
+  @HiveField(6)
+  bool isAsset; 
 
   Sound({
-    required this.id,
+    this.id,
     required this.name,
-    required this.path,
-    this.imagePath,
-    required this.themeId
+    this.audioBytes,
+    this.audioPath,
+    this.imageBytes,
+    required this.themeId,
+    required this.isAsset
   });
 }
