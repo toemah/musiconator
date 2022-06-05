@@ -59,7 +59,7 @@ class HiveUtils {
   static deleteSound(int id) {
     if (soundBox.getAt(id) != null) {
       soundBox.deleteAt(id);
-      if (id + 1 <= soundBox.length) {
+      if (id + 1 < soundBox.length) {
         for (var i = id + 1; i < soundBox.length; i++) {
           Sound sound = soundBox.getAt(i)!;
           soundBox.putAt(
@@ -79,9 +79,11 @@ class HiveUtils {
     }
   }
 
-  static addTheme(
-      {required String name, required bool isDefault, required bool hide}) {
-        print(soundThemeBox.length);
+  static addTheme({
+    required String name,
+    required bool isDefault,
+    required bool hide,
+  }) {
     soundThemeBox.add(SoundTheme(
       id: soundThemeBox.length,
       name: name,
@@ -112,8 +114,7 @@ class HiveUtils {
 
   static deleteTheme(int id) {
     if (soundThemeBox.getAt(id) != null) {
-      print(soundThemeBox.getAt(id)!.name);
-      if (id + 1 <= soundThemeBox.length) {
+      if (id + 1 < soundThemeBox.length) {
         for (var i = id + 1; i < soundThemeBox.length; i++) {
           SoundTheme theme = soundThemeBox.getAt(i)!;
           soundThemeBox.putAt(
