@@ -130,7 +130,7 @@ class _HomepageState extends State<Homepage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add),
-        label: const Text('Theme'),
+        label: const Text('Ajouter un Theme'),
         onPressed: () => {
           showForm(context, themes),
         },
