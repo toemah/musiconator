@@ -87,9 +87,9 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData.from(
         colorScheme: ColorScheme(
           brightness: Brightness.light,
-          primary: Colors.deepPurpleAccent,
+          primary: Color.fromARGB(255, 15, 145, 251),
           onPrimary: Colors.white,
-          secondary: Colors.deepPurpleAccent,
+          secondary: Color.fromARGB(255, 0, 138, 250),
           onSecondary: Colors.white,
           error: Colors.red,
           onError: Colors.red.shade700,
