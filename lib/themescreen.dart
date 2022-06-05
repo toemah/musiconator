@@ -145,7 +145,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add),
-        label: const Text('Son'),
+        label: const Text('Ajouter un Son'),
         onPressed: () => {
           Navigator.of(context).push(
             MaterialPageRoute(
