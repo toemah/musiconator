@@ -80,6 +80,7 @@ class _SoundScreenState extends State<SoundScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(MyApp.title),
+        backgroundColor: Color.fromARGB(255, 0, 153, 254),
       ),
       body: Padding(
         padding: const EdgeInsets.all(MyApp.spacing),
