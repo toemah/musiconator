@@ -6,12 +6,13 @@ import 'package:musiconator/hiveutils.dart';
 import 'package:musiconator/main.dart';
 import 'package:musiconator/sound.dart';
 import 'package:musiconator/soundtheme.dart';
+import 'package:musiconator/themescreen.dart';
 
 class SoundScreen extends StatefulWidget {
   final Sound? sound;
-  final int themeId;
+  final SoundTheme theme;
 
-  const SoundScreen({Key? key, this.sound, required this.themeId})
+  const SoundScreen({Key? key, this.sound, required this.theme})
       : super(key: key);
 
   @override
@@ -19,13 +20,15 @@ class SoundScreen extends StatefulWidget {
 }
 
 class _SoundScreenState extends State<SoundScreen> {
+  late SoundTheme theme = widget.theme;
   late Sound? sound = widget.sound;
   SoundTheme? dropdownSoundThemeValue;
   Sound? dropdownSoundValue;
-  String? selectedAudioName;
-  Uint8List? selectedAudioBytes;
-  String? selectedAudioPath; // isAsset
-  Uint8List? selectedImageBytes;
+  late String? selectedAudioName = sound != null ? sound!.name : null;
+  late Uint8List? selectedAudioBytes = sound != null ? sound!.audioBytes : null;
+  late String? selectedAudioPath =
+      sound != null ? sound!.audioPath : null; // isAsset
+  late Uint8List? selectedImageBytes = sound != null ? sound!.imageBytes : null;
   List<Sound>? soundsFromBank;
   TextEditingController soundNameField = TextEditingController();
   bool isFromBank = false;
@@ -37,17 +40,18 @@ class _SoundScreenState extends State<SoundScreen> {
     setState(() {
       soundNameField.text = sound != null
           ? sound!.name
-          : "Son ${HiveUtils.soundBox.values.where((e) => e.themeId == widget.themeId).toList().length + 1}";
+          : "Son ${HiveUtils.soundBox.values.where((e) => e.themeId == theme.id).toList().length + 1}";
     });
   }
 
   Future<void> addSoundFromDevice() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.audio,
+      withData: true,
     );
     if (result != null) {
-      selectedAudioBytes = result.files.single.bytes;
       setState(() {
+        selectedAudioBytes = result.files.single.bytes;
         selectedAudioName = result.files.single.name;
       });
     }
@@ -75,12 +79,41 @@ class _SoundScreenState extends State<SoundScreen> {
     }
   }
 
+  void confirm() {
+    if (sound != null) {
+      HiveUtils.updateSound(
+        id: sound!.id!,
+        name: soundNameField.text,
+        audioBytes: selectedAudioBytes,
+        audioPath: selectedAudioPath,
+        imageBytes: selectedImageBytes,
+      );
+    } else {
+      HiveUtils.addSound(
+        name: soundNameField.text,
+        audioBytes: selectedAudioBytes,
+        audioPath: selectedAudioPath,
+        imageBytes: selectedImageBytes,
+        themeId: theme.id,
+        isAsset: false,
+      );
+    }
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => ThemeScreen(theme: theme),
+      ),
+      (Route<dynamic> route) => false,
+    ).then((value) {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(MyApp.title),
-        backgroundColor: Color.fromARGB(255, 0, 153, 254),
       ),
       body: Padding(
         padding: const EdgeInsets.all(MyApp.spacing),
@@ -120,17 +153,18 @@ class _SoundScreenState extends State<SoundScreen> {
                             child: Stack(
                               children: [
                                 Container(
-                                  decoration: selectedImageBytes == null
-                                      ? BoxDecoration(
-                                          color: Theme.of(context).primaryColor)
-                                      : BoxDecoration(
-                                          image: DecorationImage(
-                                            image: Image.memory(
-                                                    selectedImageBytes!)
-                                                .image,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
+                                  decoration: selectedImageBytes != null
+                                          ? BoxDecoration(
+                                              image: DecorationImage(
+                                                image: Image.memory(
+                                                        selectedImageBytes!)
+                                                    .image,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                          : BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .primaryColor),
                                 ),
                                 Center(
                                   child: Container(
@@ -165,7 +199,7 @@ class _SoundScreenState extends State<SoundScreen> {
                                                 ),
                                               ),
                                       icon: const Icon(Icons.add_a_photo),
-                                      color: Colors.white,
+                                      color: Colors.grey.shade100,
                                     ),
                                   ),
                                 ),
@@ -224,10 +258,8 @@ class _SoundScreenState extends State<SoundScreen> {
                                               children: [
                                                 Flexible(
                                                   child: Text(
-                                                    sound != null
-                                                        ? sound!.name
-                                                        : selectedAudioName ??
-                                                            "Ajouter un son depuis l'appareil",
+                                                    selectedAudioName ??
+                                                        "Ajouter un son depuis l'appareil",
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                   ),
@@ -342,9 +374,13 @@ class _SoundScreenState extends State<SoundScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: selectedAudioBytes != null ||
-                              selectedAudioPath != null
-                          ? () => {}
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.greenAccent.shade700),
+                      ),
+                      onPressed: (selectedAudioBytes != null ||
+                                  selectedAudioPath != null) &&
+                              soundNameField.text != ""
+                          ? confirm
                           : null,
                       child: Text(
                         sound != null ? "Confirmer" : "Ajouter",
