@@ -52,6 +52,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(MyApp.title),
+        backgroundColor: Color.fromARGB(255, 0, 153, 254),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: backToHomepage,
@@ -71,10 +72,25 @@ class _ThemeScreenState extends State<ThemeScreen> {
               }
               backToHomepage();
             },
-            child: const Text(
-              "Supprimer",
-              style: TextStyle(
+            child:Container(
+              padding: const EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
                 color: Colors.red,
+              border: Border.all(
+                color: Colors.red,
+                width: 2.0,
+                style: BorderStyle.solid),
+                //Border.all
+              borderRadius: const BorderRadius.all(
+                Radius.circular(10),
+              ), //BorderRadius.all
+              ),
+              
+              child: Text(
+                "Supprimer le thème",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
