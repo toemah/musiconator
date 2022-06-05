@@ -7,11 +7,9 @@ import 'package:musiconator/sound.dart';
 import 'package:musiconator/soundscreen.dart';
 
 class SoundWidget extends StatefulWidget {
-  final bool isAsset;
   final Sound sound;
 
-  const SoundWidget({Key? key, this.isAsset = false, required this.sound})
-      : super(key: key);
+  const SoundWidget({Key? key, required this.sound}) : super(key: key);
 
   @override
   State<SoundWidget> createState() => _SoundWidgetState();
@@ -20,7 +18,7 @@ class SoundWidget extends StatefulWidget {
 class _SoundWidgetState extends State<SoundWidget> {
   late Sound sound = widget.sound;
   late var player =
-      widget.isAsset ? AudioCache(prefix: MyApp.assetsPath) : AudioPlayer();
+      sound.isAsset ? AudioCache(prefix: MyApp.assetsPath) : AudioPlayer();
   bool actionsVisibility = false;
 
   @override
@@ -38,19 +36,45 @@ class _SoundWidgetState extends State<SoundWidget> {
 
   void play() async {
     if (player is AudioCache) {
-      (player as AudioCache).play(sound.path);
+      if (sound.isAsset) {
+        (player as AudioCache).play(sound.audioPath!);
+      } else {
+        (player as AudioCache).playBytes(sound.audioBytes!);
+      }
     } else {
-      await (player as AudioPlayer).play(sound.path, isLocal: true);
+      if (sound.isAsset) {
+        await (player as AudioPlayer).play(sound.audioPath!, isLocal: true);
+      } else {
+        await (player as AudioPlayer).playBytes(sound.audioBytes!);
+      }
     }
   }
 
-  Widget actionButton(String text, IconData icon, Function()? _onPressed) {
+  Widget actionButton(
+      {required String text,
+      required IconData icon,
+      Color? iconColor,
+      Function()? onPressed}) {
     return MaterialButton(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [Text(text), Icon(icon)],
+        children: [
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.bodySmall!.fontSize,
+            ),
+          ),
+          IconTheme(
+            data: IconThemeData(
+              color:
+                  onPressed != null ? iconColor ?? Colors.black : Colors.grey,
+            ),
+            child: Icon(icon),
+          ),
+        ],
       ),
-      onPressed: _onPressed,
+      onPressed: onPressed,
       disabledColor: Colors.grey.shade200,
       disabledTextColor: Colors.grey,
     );
@@ -75,6 +99,7 @@ class _SoundWidgetState extends State<SoundWidget> {
       MaterialPageRoute(
         builder: (context) => SoundScreen(
           sound: sound,
+          themeId: sound.themeId,
         ),
       ),
     );
@@ -87,11 +112,9 @@ class _SoundWidgetState extends State<SoundWidget> {
   @override
   Widget build(BuildContext context) {
     return ButtonTheme(
-      minWidth: 100.0,
-      height: 100.0,
       child: Stack(
         children: [
-          sound.imagePath == null
+          sound.imageBytes == null
               ? ElevatedButton(
                   onPressed: play,
                   onLongPress: showActions,
@@ -101,7 +124,7 @@ class _SoundWidgetState extends State<SoundWidget> {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize:
-                              Theme.of(context).textTheme.headline6!.fontSize),
+                              Theme.of(context).textTheme.bodyLarge!.fontSize),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -115,7 +138,6 @@ class _SoundWidgetState extends State<SoundWidget> {
                         sound.name,
                         style: TextStyle(
                             color: Colors.white,
-                            backgroundColor: const Color.fromARGB(127, 0, 0, 0),
                             fontSize: Theme.of(context)
                                 .textTheme
                                 .headline6!
@@ -124,10 +146,9 @@ class _SoundWidgetState extends State<SoundWidget> {
                       ),
                     ),
                     decoration: BoxDecoration(
+                      color: const Color.fromARGB(127, 0, 0, 0),
                       image: DecorationImage(
-                        image: FileImage(
-                          File(sound.imagePath!),
-                        ),
+                        image: Image.memory(sound.imageBytes!).image,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -135,36 +156,42 @@ class _SoundWidgetState extends State<SoundWidget> {
                 ),
           Visibility(
             visible: actionsVisibility,
-            child: Material(
-              child: Container(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: actionButton(
-                            "Modifier", Icons.edit_outlined, widget.isAsset ? null : editAction),
-                      ),
-                      const Divider(),
-                      Expanded(
-                        flex: 1,
-                        child: actionButton(
-                            "Supprimer", Icons.delete_outlined, () => {}),
-                      ),
-                      const Divider(),
-                      Expanded(
-                        flex: 1,
-                        child: actionButton(
-                            "Annuler", Icons.cancel_outlined, cancelAction),
-                      )
-                    ],
+            child: Container(
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: actionButton(
+                      text: "Modifier",
+                      icon: Icons.edit_outlined,
+                      iconColor: Colors.yellow,
+                      onPressed: sound.isAsset ? null : editAction,
+                    ),
                   ),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
+                  Expanded(
+                    flex: 1,
+                    child: actionButton(
+                      text: "Supprimer",
+                      icon: Icons.delete_outlined,
+                      iconColor: Colors.red,
+                      onPressed: () => {},
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: actionButton(
+                      text: "Annuler",
+                      icon: Icons.cancel_outlined,
+                      onPressed: cancelAction,
+                    ),
+                  )
+                ],
+              ),
+              decoration: const BoxDecoration(
+                color: Colors.white,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
