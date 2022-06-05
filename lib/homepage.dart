@@ -15,9 +15,15 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  late List<SoundTheme> themes =
-      HiveUtils.soundThemeBox.values.where((e) => !e.hide).toList();
+  late List<SoundTheme> themes;
   final TextEditingController _nameController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    themes = HiveUtils.soundThemeBox.values.where((e) => !e.hide).toList();
+    themes.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+  }
 
   void showForm(BuildContext ctx, List themes) async {
     showModalBottomSheet(
@@ -49,6 +55,9 @@ class _HomepageState extends State<Homepage> {
               height: 50,
             ),
             ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.greenAccent.shade700),
+              ),
               onPressed: () async {
                 themes.add(
                   SoundTheme(
@@ -58,6 +67,8 @@ class _HomepageState extends State<Homepage> {
                     hide: false,
                   ),
                 );
+                themes.sort((a, b) =>
+                    a.name.toLowerCase().compareTo(b.name.toLowerCase()));
                 HiveUtils.addTheme(
                   name: _nameController.text,
                   isDefault: false,
@@ -81,8 +92,9 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(MyApp.title),
-      backgroundColor: Color.fromARGB(255, 0, 153, 254)),
+      appBar: AppBar(
+        title: const Text(MyApp.title),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(MyApp.spacing),
         child: Center(
@@ -106,7 +118,8 @@ class _HomepageState extends State<Homepage> {
                       padding: const EdgeInsets.only(
                           top: MyApp.spacing, bottom: MyApp.spacing),
                       child: Text(
-                        themes[index].name,
+                        themes[index].name[0].toUpperCase() +
+                            themes[index].name.substring(1).toLowerCase(),
                         style: TextStyle(
                           fontSize: Theme.of(context)
                               .textTheme
