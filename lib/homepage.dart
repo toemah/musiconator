@@ -81,7 +81,8 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(MyApp.title)),
+      appBar: AppBar(title: const Text(MyApp.title),
+      backgroundColor: Color.fromARGB(255, 0, 153, 254)),
       body: Padding(
         padding: const EdgeInsets.all(MyApp.spacing),
         child: Center(
