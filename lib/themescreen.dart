@@ -52,7 +52,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(MyApp.title),
-        backgroundColor: Color.fromARGB(255, 0, 153, 254),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: backToHomepage,
@@ -89,7 +88,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
               child: Text(
                 "Supprimer le thème",
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.grey.shade100,
                 ),
               ),
             ),
@@ -104,10 +103,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: MyApp.maxWidthLarge),
               child: Column(
-                crossAxisAlignment: MediaQuery.of(context).size.width <
-                        soundWidgetSize * 2 + MyApp.spacing * 3
-                    ? CrossAxisAlignment.center
-                    : CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TextField(
                     controller: themeNameField,
@@ -127,12 +123,9 @@ class _ThemeScreenState extends State<ThemeScreen> {
                     runSpacing: MyApp.spacing,
                     children: sounds
                         .map(
-                          (e) => SizedBox(
-                            width: soundWidgetSize,
-                            height: soundWidgetSize,
-                            child: SoundWidget(
-                              sound: e,
-                            ),
+                          (e) => SoundWidget(
+                            sound: e,
+                            size: soundWidgetSize,
                           ),
                         )
                         .toList(),
@@ -144,12 +137,13 @@ class _ThemeScreenState extends State<ThemeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Ajouter un Son'),
+        icon: const Icon(Icons.add),
+        label: const Text('Son'),
         onPressed: () => {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => SoundScreen(
-                themeId: theme.id,
+                theme: theme,
               ),
             ),
           ),
