@@ -6,11 +6,8 @@ import 'package:musiconator/themescreen.dart';
 import 'hiveutils.dart';
 
 class Homepage extends StatefulWidget {
-  final List<SoundTheme> themes;
-
   const Homepage({
     Key? key,
-    required this.themes,
   }) : super(key: key);
 
   @override
@@ -18,10 +15,11 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  late List<SoundTheme> themes = widget.themes;
+  late List<SoundTheme> themes =
+      HiveUtils.soundThemeBox.values.where((e) => !e.hide).toList();
   final TextEditingController _nameController = TextEditingController();
 
-  void _showForm(BuildContext ctx, int? itemKey, List themes) async {
+  void showForm(BuildContext ctx, List themes) async {
     showModalBottomSheet(
       context: ctx,
       elevation: 5,
@@ -41,7 +39,10 @@ class _HomepageState extends State<Homepage> {
               controller: _nameController,
               decoration: InputDecoration(
                 hintText: 'Nom du theme',
-                hintStyle: Theme.of(context).textTheme.bodyMedium,
+                hintStyle: TextStyle(
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                  color: Colors.grey,
+                ),
               ),
             ),
             const SizedBox(
@@ -51,16 +52,22 @@ class _HomepageState extends State<Homepage> {
               onPressed: () async {
                 themes.add(
                   SoundTheme(
-                    id: themes.length,
+                    id: HiveUtils.soundThemeBox.length,
                     name: _nameController.text,
+                    isDefault: false,
+                    hide: false,
                   ),
                 );
-                HiveUtils.addTheme(_nameController.text);
+                HiveUtils.addTheme(
+                  name: _nameController.text,
+                  isDefault: false,
+                  hide: false,
+                );
                 setState(() {});
                 _nameController.text = '';
                 Navigator.of(ctx).pop();
               },
-              child: Text(itemKey == null ? 'Valider' : 'Update'),
+              child: const Text("Ajouter"),
             ),
             const SizedBox(
               height: 10,
@@ -74,9 +81,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(MyApp.title),
-      ),
+      appBar: AppBar(title: const Text(MyApp.title)),
       body: Padding(
         padding: const EdgeInsets.all(MyApp.spacing),
         child: Center(
@@ -126,7 +131,7 @@ class _HomepageState extends State<Homepage> {
         icon: const Icon(Icons.add),
         label: const Text('Theme'),
         onPressed: () => {
-          _showForm(context, null, themes),
+          showForm(context, themes),
         },
       ),
     );
