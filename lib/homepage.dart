@@ -91,62 +91,119 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    int _currentIndex = 0;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(MyApp.title),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(MyApp.spacing),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: MyApp.maxWidth),
-            child: ListView.builder(
-              itemCount: themes.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: MyApp.spacing),
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ThemeScreen(
-                          theme: themes[index],
-                        ),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: MyApp.spacing, bottom: MyApp.spacing),
-                      child: Text(
-                        themes[index].name[0].toUpperCase() +
-                            themes[index].name.substring(1).toLowerCase(),
-                        style: TextStyle(
-                          fontSize: Theme.of(context)
-                              .textTheme
-                              .headlineSmall!
-                              .fontSize,
-                        ),
-                      ),
-                    ),
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+        title: Image.asset('images/musiconator.png', width: 280 , fit: BoxFit.cover),
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: <Color>[Colors.red.shade200, Colors.purple])),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Ajouter un Theme'),
-        onPressed: () => {
-          showForm(context, themes),
-        },
+
+      body: Stack(
+        children:<Widget> [
+          Center(
+            child: Card(
+              clipBehavior: Clip.antiAlias,
+              child: ListView.builder(
+                itemCount: themes.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ThemeScreen(
+                            theme: themes[index],
+                          ),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: MyApp.spacing, bottom: MyApp.spacing),
+                        child: Text(
+                          themes[index].name[0].toUpperCase() +
+                              themes[index].name.substring(1).toLowerCase(),
+                          style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .headlineSmall!
+                                .fontSize,
+                          ),
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+          ),
+        ],
       ),
+
+
+
+
+
+    bottomNavigationBar: BottomAppBar(
+
+      color: Colors.purple,
+
+      child: Row(
+        children: [
+          IconButton(icon: Icon(Icons.person_outlined,color: Colors.white,),
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('About us'),
+                  content: Text('Petite équipe de 5 étudiants passionnés de bruitages poétiques tel que les explosions et les mélodides des toilettes. :-)'),
+                ),
+              ),
+          ),
+
+          Spacer(),
+
+          IconButton(icon: Icon(Icons.info,color: Colors.white,),  onPressed: () => showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Comment ça marche ? '),
+              content: Text('-Choisissez votre catégorie\n'
+                  '- Ecoutez les son les plus amusant d"Orsay en appuyant sur le son que vous voulez !\n'
+              '-Vous pouvez personnaliser chaque catégorie en rajoutant des sons rigolo, voir même supprimer des son démodé : Bouuuuh ! :-(\n'
+              '-Vous voulez encore plus de catégorie ? Et bien c"est tout à fait possible : Vous pouvez créer votre propre catégorie dans le menu principal grâce au bouton "Ajouter un thème !\n'
+              '-Amusez vous bien ! :-p '),
+            ),
+          ),
+          ),
+        ],
+      ),
+    ),
+    floatingActionButton:
+    FloatingActionButton.extended(
+    label: const Text('Ajouter un Theme'),
+    onPressed: () => {
+    showForm(context, themes),
+    },
+    ),
+    floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
+
+
+
+

@@ -51,12 +51,20 @@ class _ThemeScreenState extends State<ThemeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(MyApp.title),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: <Color>[Colors.red.shade200, Colors.purple])),),
+        title: Image.asset('images/musiconator.png', width: 280 , fit: BoxFit.cover),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: backToHomepage,
         ),
+
         actions: [
+
           TextButton(
             onPressed: () {
               if (theme.isDefault) {
@@ -71,12 +79,13 @@ class _ThemeScreenState extends State<ThemeScreen> {
               }
               backToHomepage();
             },
+
             child: Container(
               padding: const EdgeInsets.all(5.0),
               decoration: BoxDecoration(
-                color: Colors.red.shade700,
+                color: Colors.red.shade400,
                 border: Border.all(
-                  color: Colors.red.shade700,
+                  color: Colors.red.shade400,
                   width: 2.0,
                   style: BorderStyle.solid,
                 ),
@@ -94,6 +103,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
           ),
         ],
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(MyApp.spacing),
         child: Align(
