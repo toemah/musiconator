@@ -128,6 +128,9 @@ class HiveUtils {
           );
         }
       }
+      soundBox.values.where((e) => e.themeId == id).forEach((e) {
+        deleteSound(e.id!);
+      });
       soundThemeBox.deleteAt(id);
     }
   }

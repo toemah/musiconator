@@ -122,7 +122,7 @@ class _SoundScreenState extends State<SoundScreen> {
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 minHeight:
-                    MediaQuery.of(context).size.height - MyApp.spacing * 10,
+                    MediaQuery.of(context).size.height - imageWidth,
                 maxWidth: MyApp.maxWidth,
               ),
               child: Column(
