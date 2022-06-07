@@ -89,7 +89,6 @@ class _SoundScreenState extends State<SoundScreen> {
   void confirm() {
     String name = soundNameField.text;
     if (sound != null) { // Si l'utilisateur avait demandé à faire une mise à jour des informations du son, celle-ci sont mises à jour dans la bdd locale Hive
-      print(selectedAudioPath);
       HiveUtils.updateSound(
         id: sound!.id!,
         name: name[0].toUpperCase() + name.substring(1).toLowerCase(),
