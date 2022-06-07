@@ -42,14 +42,15 @@ class HiveUtils {
   }) {
     Sound? oldSound = soundBox.getAt(id);
     if (oldSound != null) {
+      // audioBytes, audioPath et imageBytes peuvent être null
       soundBox.putAt(
         id,
         Sound(
           id: id,
           name: name ?? oldSound.name,
-          audioBytes: audioBytes ?? oldSound.audioBytes,
-          audioPath: audioPath ?? oldSound.audioPath,
-          imageBytes: imageBytes ?? oldSound.imageBytes,
+          audioBytes: audioBytes,
+          audioPath: audioPath,
+          imageBytes: imageBytes,
           themeId: themeId ?? oldSound.themeId,
           isAsset: isAsset ?? oldSound.isAsset,
         ),
