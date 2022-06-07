@@ -8,6 +8,9 @@ import "package:musiconator/sound.dart";
 import "package:musiconator/soundtheme.dart";
 import "package:musiconator/themescreen.dart";
 
+/*
+  Page d'ajout des sons pour un thème donné
+ */
 class SoundScreen extends StatefulWidget {
   final Sound? sound;
   final SoundTheme theme;
@@ -44,6 +47,7 @@ class _SoundScreenState extends State<SoundScreen> {
     });
   }
 
+  // Fonction d'ajout de son via l'explorateur de fichier de l'appareil, les données du son sélectionnés sont ensuite sauvegardés dans une variable puis seront enregistré dans Hive à la confirmation
   Future<void> addSoundFromDevice() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.audio,
@@ -69,6 +73,7 @@ class _SoundScreenState extends State<SoundScreen> {
     Navigator.pop(context);
   }
 
+  // Fonction d'ajout d'image dont les données sont sauvegardés dans une variable
   Future<void> addImage() async {
     FilePickerResult? result = await FilePicker.platform
         .pickFiles(type: FileType.image, withData: true);
@@ -79,9 +84,10 @@ class _SoundScreenState extends State<SoundScreen> {
     }
   }
 
+  // Lorsque l'utilisateur valide son choix de son et d'image
   void confirm() {
     String name = soundNameField.text;
-    if (sound != null) {
+    if (sound != null) { // Si l'utilisateur avait demandé à faire une mise à jour des informations du son, celle-ci sont mises à jour dans la bdd locale Hive
       HiveUtils.updateSound(
         id: sound!.id!,
         name: name[0].toUpperCase() + name.substring(1).toLowerCase(),
@@ -89,7 +95,7 @@ class _SoundScreenState extends State<SoundScreen> {
         audioPath: selectedAudioPath,
         imageBytes: selectedImageBytes,
       );
-    } else {
+    } else { // Si l'utilisateur veut au contraire ajouter un son, celui-ci et son image sont sauvegardés dans la bdd locale Hive
       HiveUtils.addSound(
         name: name[0].toUpperCase() + name.substring(1).toLowerCase(),
         audioBytes: selectedAudioBytes,
