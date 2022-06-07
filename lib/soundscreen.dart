@@ -1,12 +1,12 @@
-import 'dart:typed_data';
+import "dart:typed_data";
 
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:musiconator/hiveutils.dart';
-import 'package:musiconator/main.dart';
-import 'package:musiconator/sound.dart';
-import 'package:musiconator/soundtheme.dart';
-import 'package:musiconator/themescreen.dart';
+import "package:file_picker/file_picker.dart";
+import "package:flutter/material.dart";
+import "package:musiconator/hiveutils.dart";
+import "package:musiconator/main.dart";
+import "package:musiconator/sound.dart";
+import "package:musiconator/soundtheme.dart";
+import "package:musiconator/themescreen.dart";
 
 class SoundScreen extends StatefulWidget {
   final Sound? sound;
@@ -80,17 +80,18 @@ class _SoundScreenState extends State<SoundScreen> {
   }
 
   void confirm() {
+    String name = soundNameField.text;
     if (sound != null) {
       HiveUtils.updateSound(
         id: sound!.id!,
-        name: soundNameField.text,
+        name: name[0].toUpperCase() + name.substring(1).toLowerCase(),
         audioBytes: selectedAudioBytes,
         audioPath: selectedAudioPath,
         imageBytes: selectedImageBytes,
       );
     } else {
       HiveUtils.addSound(
-        name: soundNameField.text,
+        name: name[0].toUpperCase() + name.substring(1).toLowerCase(),
         audioBytes: selectedAudioBytes,
         audioPath: selectedAudioPath,
         imageBytes: selectedImageBytes,
@@ -113,7 +114,19 @@ class _SoundScreenState extends State<SoundScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(MyApp.title),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                Colors.red.shade200,
+                Colors.purple,
+              ],
+            ),
+          ),
+        ),
+        title: Image.asset("assets/images/musiconator.png", height: 80.0),
       ),
       body: Padding(
         padding: const EdgeInsets.all(MyApp.spacing),
@@ -121,8 +134,7 @@ class _SoundScreenState extends State<SoundScreen> {
           child: SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight:
-                    MediaQuery.of(context).size.height - imageWidth,
+                minHeight: MediaQuery.of(context).size.height - imageWidth,
                 maxWidth: MyApp.maxWidth,
               ),
               child: Column(
@@ -154,17 +166,17 @@ class _SoundScreenState extends State<SoundScreen> {
                               children: [
                                 Container(
                                   decoration: selectedImageBytes != null
-                                          ? BoxDecoration(
-                                              image: DecorationImage(
-                                                image: Image.memory(
-                                                        selectedImageBytes!)
-                                                    .image,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            )
-                                          : BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .primaryColor),
+                                      ? BoxDecoration(
+                                          image: DecorationImage(
+                                            image: Image.memory(
+                                                    selectedImageBytes!)
+                                                .image,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : BoxDecoration(
+                                          color:
+                                              Theme.of(context).primaryColor),
                                 ),
                                 Center(
                                   child: Container(
@@ -229,6 +241,9 @@ class _SoundScreenState extends State<SoundScreen> {
                                           ),
                                         ),
                                         Checkbox(
+                                          activeColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           value: isFromBank,
                                           onChanged: (bool? value) {
                                             setState(
@@ -375,7 +390,8 @@ class _SoundScreenState extends State<SoundScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.greenAccent.shade700),
+                        backgroundColor: MaterialStateProperty.all(
+                            Colors.greenAccent.shade700),
                       ),
                       onPressed: (selectedAudioBytes != null ||
                                   selectedAudioPath != null) &&

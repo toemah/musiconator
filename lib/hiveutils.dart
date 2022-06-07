@@ -1,9 +1,9 @@
-import 'dart:typed_data';
+import "dart:typed_data";
 
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:musiconator/main.dart';
-import 'package:musiconator/sound.dart';
-import 'package:musiconator/soundtheme.dart';
+import "package:hive_flutter/hive_flutter.dart";
+import "package:musiconator/main.dart";
+import "package:musiconator/sound.dart";
+import "package:musiconator/soundtheme.dart";
 
 class HiveUtils {
   static Box<Sound> soundBox = Hive.box(MyApp.soundBox);

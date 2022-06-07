@@ -1,6 +1,6 @@
-import 'package:hive/hive.dart';
+import "package:hive/hive.dart";
 
-part 'soundtheme.g.dart';
+part "soundtheme.g.dart";
 
 @HiveType(typeId: 2)
 class SoundTheme {

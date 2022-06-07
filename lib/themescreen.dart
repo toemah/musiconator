@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:musiconator/hiveutils.dart';
-import 'package:musiconator/homepage.dart';
-import 'package:musiconator/main.dart';
-import 'package:musiconator/sound.dart';
-import 'package:musiconator/soundWidget.dart';
-import 'package:musiconator/soundscreen.dart';
-import 'package:musiconator/soundtheme.dart';
+import "package:flutter/material.dart";
+import "package:musiconator/hiveutils.dart";
+import "package:musiconator/homepage.dart";
+import "package:musiconator/main.dart";
+import "package:musiconator/sound.dart";
+import "package:musiconator/soundWidget.dart";
+import "package:musiconator/soundscreen.dart";
+import "package:musiconator/soundtheme.dart";
 
 class ThemeScreen extends StatefulWidget {
   final SoundTheme theme;
@@ -53,18 +53,22 @@ class _ThemeScreenState extends State<ThemeScreen> {
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: <Color>[Colors.red.shade200, Colors.purple])),),
-        title: Image.asset('images/musiconator.png', width: 280 , fit: BoxFit.cover),
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                Colors.red.shade200,
+                Colors.purple,
+              ],
+            ),
+          ),
+        ),
+        title: Image.asset("assets/images/musiconator.png", height: 80.0),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: backToHomepage,
         ),
-
         actions: [
-
           TextButton(
             onPressed: () {
               if (theme.isDefault) {
@@ -79,7 +83,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
               }
               backToHomepage();
             },
-
             child: Container(
               padding: const EdgeInsets.all(5.0),
               decoration: BoxDecoration(
@@ -103,7 +106,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
           ),
         ],
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(MyApp.spacing),
         child: Align(
@@ -146,7 +148,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Ajouter un Son'),
+        label: const Text("Ajouter un Son"),
         onPressed: () => {
           Navigator.of(context).push(
             MaterialPageRoute(

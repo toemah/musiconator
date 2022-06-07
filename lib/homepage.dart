@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:musiconator/main.dart';
-import 'package:musiconator/soundtheme.dart';
-import 'package:musiconator/themescreen.dart';
+import "package:flutter/material.dart";
+import "package:musiconator/main.dart";
+import "package:musiconator/soundtheme.dart";
+import "package:musiconator/themescreen.dart";
 
-import 'hiveutils.dart';
+import "hiveutils.dart";
 
 class Homepage extends StatefulWidget {
   const Homepage({
@@ -44,7 +44,7 @@ class _HomepageState extends State<Homepage> {
             TextField(
               controller: _nameController,
               decoration: InputDecoration(
-                hintText: 'Nom du theme',
+                hintText: "Nom du theme",
                 hintStyle: TextStyle(
                   fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.grey,
@@ -56,7 +56,8 @@ class _HomepageState extends State<Homepage> {
             ),
             ElevatedButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.greenAccent.shade700),
+                backgroundColor:
+                    MaterialStateProperty.all(Colors.greenAccent.shade700),
               ),
               onPressed: () async {
                 themes.add(
@@ -75,7 +76,7 @@ class _HomepageState extends State<Homepage> {
                   hide: false,
                 );
                 setState(() {});
-                _nameController.text = '';
+                _nameController.text = "";
                 Navigator.of(ctx).pop();
               },
               child: const Text("Ajouter"),
@@ -91,119 +92,115 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    int _currentIndex = 0;
-
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset('images/musiconator.png', width: 280 , fit: BoxFit.cover),
+        title: Image.asset("assets/images/musiconator.png", height: 80.0),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  colors: <Color>[Colors.red.shade200, Colors.purple])),
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                Colors.red.shade200,
+                Colors.purple,
+              ],
+            ),
+          ),
         ),
       ),
-
-      body: Stack(
-        children:<Widget> [
-          Center(
-            child: Card(
-              clipBehavior: Clip.antiAlias,
-              child: ListView.builder(
-                itemCount: themes.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: ElevatedButton(
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ThemeScreen(
-                            theme: themes[index],
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: MyApp.spacing, bottom: MyApp.spacing),
-                        child: Text(
-                          themes[index].name[0].toUpperCase() +
-                              themes[index].name.substring(1).toLowerCase(),
-                          style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .headlineSmall!
-                                .fontSize,
-                          ),
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                        ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: MyApp.maxWidth),
+          child: ListView.builder(
+            itemCount: themes.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(MyApp.spacing),
+                child: ElevatedButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ThemeScreen(
+                        theme: themes[index],
                       ),
                     ),
-                  );
-                },
-              ),
-            ),
-
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      top: MyApp.spacing,
+                      bottom: MyApp.spacing,
+                    ),
+                    child: Text(
+                      themes[index].name,
+                      style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.headlineSmall!.fontSize,
+                      ),
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0)),
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
-        ],
+        ),
       ),
-
-
-
-
-
-    bottomNavigationBar: BottomAppBar(
-
-      color: Colors.purple,
-
-      child: Row(
-        children: [
-          IconButton(icon: Icon(Icons.person_outlined,color: Colors.white,),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.purple,
+        child: Row(
+          children: [
+            IconButton(
+              icon: const Icon(
+                Icons.people_outlined,
+                color: Colors.white,
+              ),
               onPressed: () => showDialog(
                 context: context,
-                builder: (context) => AlertDialog(
-                  title: Text('About us'),
-                  content: Text('Petite équipe de 5 étudiants passionnés de bruitages poétiques tel que les explosions et les mélodides des toilettes. :-)'),
+                builder: (context) => const AlertDialog(
+                  title: Text("L'équipe"),
+                  content: Text(
+                      "Cette application est l'oeuvre d'une petite équipe de 5 étudiants"
+                      "passionnés de bruitages poétiques tel que les explosions et les mélodides des toilettes. :-)"),
                 ),
               ),
-          ),
-
-          Spacer(),
-
-          IconButton(icon: Icon(Icons.info,color: Colors.white,),  onPressed: () => showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text('Comment ça marche ? '),
-              content: Text('-Choisissez votre catégorie\n'
-                  '- Ecoutez les son les plus amusant d"Orsay en appuyant sur le son que vous voulez !\n'
-              '-Vous pouvez personnaliser chaque catégorie en rajoutant des sons rigolo, voir même supprimer des son démodé : Bouuuuh ! :-(\n'
-              '-Vous voulez encore plus de catégorie ? Et bien c"est tout à fait possible : Vous pouvez créer votre propre catégorie dans le menu principal grâce au bouton "Ajouter un thème !\n'
-              '-Amusez vous bien ! :-p '),
             ),
-          ),
-          ),
-        ],
+            const Spacer(),
+            IconButton(
+              icon: const Icon(
+                Icons.info,
+                color: Colors.white,
+              ),
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => const AlertDialog(
+                  title: Text("Comment ça marche ? "),
+                  content: Text(
+                    "-Choisissez votre catégorie\n"
+                    "- Ecoutez les son les plus amusants d'Orsay en appuyant sur le son que vous voulez!\n"
+                    "- Vous pouvez personnaliser chaque catégorie en rajoutant des sons rigolo, voir même supprimer des son démodés! :-(\n"
+                    "- Vous voulez encore plus de catégories? Et bien c'est tout à fait possible: Vous pouvez créer votre propre catégorie dans le menu principal grâce au bouton \"Ajouter un thème\"!\n"
+                    "- Vous pouvez ajouter des sons à n'importe quelle catégorie avec le bouton \"Ajouter un son\" puis vous pouvez les éditer ou supprimer en appyant longtemps dessus!"
+                    "-Amusez vous bien ! :-p ",
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-    floatingActionButton:
-    FloatingActionButton.extended(
-    label: const Text('Ajouter un Theme'),
-    onPressed: () => {
-    showForm(context, themes),
-    },
-    ),
-    floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton.extended(
+        label: const Text("Ajouter un thème"),
+        onPressed: () => {
+          showForm(context, themes),
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
-
-
-
-

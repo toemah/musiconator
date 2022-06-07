@@ -1,12 +1,9 @@
-import 'dart:io';
-
-import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/material.dart';
-import 'package:musiconator/hiveutils.dart';
-import 'package:musiconator/main.dart';
-import 'package:musiconator/sound.dart';
-import 'package:musiconator/soundscreen.dart';
-import 'package:musiconator/themescreen.dart';
+import "package:audioplayers/audioplayers.dart";
+import "package:flutter/material.dart";
+import "package:musiconator/hiveutils.dart";
+import "package:musiconator/sound.dart";
+import "package:musiconator/soundscreen.dart";
+import "package:musiconator/themescreen.dart";
 
 class SoundWidget extends StatefulWidget {
   final Sound sound;
@@ -22,7 +19,7 @@ class SoundWidget extends StatefulWidget {
 class _SoundWidgetState extends State<SoundWidget> {
   late Sound sound = widget.sound;
   late var player =
-      sound.audioPath != null ? AudioCache(prefix: MyApp.assetsPath) : AudioPlayer();
+      sound.audioPath != null ? AudioCache(prefix: "assets/audio/") : AudioPlayer();
   bool actionsVisibility = false;
 
   @override

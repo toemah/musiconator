@@ -25,29 +25,27 @@ class MyApp extends StatefulWidget {
   static const String soundBox = "sound";
   static const String soundThemeBox = "theme";
 
-  static const String assetsPath = "assets/audio/";
-
   static List<SoundTheme> defaultThemes = [
-    SoundTheme(id: 0, name: "explosion", isDefault: true, hide: false),
-    SoundTheme(id: 1, name: "fun", isDefault: true, hide: false),
-    SoundTheme(id: 2, name: "serious", isDefault: true, hide: false),
+    SoundTheme(id: 0, name: "Explosion", isDefault: true, hide: false),
+    SoundTheme(id: 1, name: "Fun", isDefault: true, hide: false),
+    SoundTheme(id: 2, name: "Serious", isDefault: true, hide: false),
   ];
 
   static List<Sound> defaultSounds = [
     Sound(
         isAsset: true,
-        name: "default explosion",
+        name: "Explosion sympa",
         audioPath: "explosion.mp3",
         themeId: 0),
     Sound(
       isAsset: true,
-      name: "flushing toilet",
+      name: "Chasse d'eau",
       audioPath: "flush.mp3",
       themeId: 1,
     ),
     Sound(
       isAsset: true,
-      name: "goop sound",
+      name: "Splash",
       audioPath: "splat.mp3",
       themeId: 1,
     ),
@@ -89,14 +87,14 @@ class _MyAppState extends State<MyApp> {
           brightness: Brightness.light,
           primary: Colors.red.shade200,
           onPrimary: Colors.grey.shade100,
-          secondary: const Color.fromARGB(200, 39, 39, 39),
-          onSecondary: Colors.grey.shade100,
+          secondary: const Color.fromARGB(200, 239, 233, 233),
+          onSecondary: Colors.grey.shade900,
           error: Colors.red.shade500,
           onError: Colors.grey.shade900,
           background: Colors.grey.shade100,
-          onBackground: Colors.grey.shade100,
+          onBackground: Colors.grey.shade900,
           surface: Colors.grey.shade100,
-          onSurface: Colors.grey.shade100,
+          onSurface: Colors.grey.shade900,
         ),
         textTheme: Theme.of(context)
             .textTheme

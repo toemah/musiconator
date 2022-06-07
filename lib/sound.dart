@@ -1,8 +1,8 @@
-import 'dart:typed_data';
+import "dart:typed_data";
 
-import 'package:hive/hive.dart';
+import "package:hive/hive.dart";
 
-part 'sound.g.dart';
+part "sound.g.dart";
 
 @HiveType(typeId: 1)
 class Sound {

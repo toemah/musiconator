@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'soundtheme.dart';
+part of "soundtheme.dart";
 
 // **************************************************************************
 // TypeAdapterGenerator
