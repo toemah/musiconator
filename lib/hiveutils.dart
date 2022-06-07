@@ -5,6 +5,7 @@ import "package:musiconator/main.dart";
 import "package:musiconator/sound.dart";
 import "package:musiconator/soundtheme.dart";
 
+// Pour les sons et les thèmes leur index est enregistré comme un ID
 class HiveUtils {
   static Box<Sound> soundBox = Hive.box(MyApp.soundBox);
   static Box<SoundTheme> soundThemeBox = Hive.box(MyApp.soundThemeBox);
@@ -59,6 +60,8 @@ class HiveUtils {
   static deleteSound(int id) {
     if (soundBox.getAt(id) != null) {
       if (id + 1 < soundBox.length) {
+        // Puisque l'ID d'un son est aussi son index, il faut tout mettre à jour les entrées suivantes
+        // afin d'éviter une erreur IndexOutOfRange
         for (var i = id + 1; i < soundBox.length; i++) {
           Sound sound = soundBox.getAt(i)!;
           soundBox.putAt(
@@ -75,6 +78,7 @@ class HiveUtils {
           );
         }
       }
+      // en suite supprimer le son
       soundBox.deleteAt(id);
     }
   }
@@ -115,6 +119,8 @@ class HiveUtils {
   static deleteTheme(int id) {
     if (soundThemeBox.getAt(id) != null) {
       if (id + 1 < soundThemeBox.length) {
+        // Puisque l'ID d'un thème est aussi son index, il faut tout mettre à jour les entrées suivantes
+        // afin d'éviter une erreur IndexOutOfRange
         for (var i = id + 1; i < soundThemeBox.length; i++) {
           SoundTheme theme = soundThemeBox.getAt(i)!;
           soundThemeBox.putAt(
@@ -128,9 +134,11 @@ class HiveUtils {
           );
         }
       }
+      // en suite supprimer les sons du thème
       soundBox.values.where((e) => e.themeId == id).forEach((e) {
         deleteSound(e.id!);
       });
+      // enfin supprimer le thème
       soundThemeBox.deleteAt(id);
     }
   }

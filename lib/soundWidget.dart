@@ -18,14 +18,12 @@ class SoundWidget extends StatefulWidget {
 
 class _SoundWidgetState extends State<SoundWidget> {
   late Sound sound = widget.sound;
-  late var player =
-      sound.audioPath != null ? AudioCache(prefix: "assets/audio/") : AudioPlayer();
+  // Si le son est un asset AudioCache doit être utilisé
+  // sinon AudioPlayer, c'est une contrainte du plugin
+  late var player = sound.audioPath != null
+      ? AudioCache(prefix: "assets/audio/")
+      : AudioPlayer();
   bool actionsVisibility = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -35,27 +33,24 @@ class _SoundWidgetState extends State<SoundWidget> {
     }
   }
 
+  // Cette fonction joue le son, si c'est asset avec la méthode play d'AudioCache
+  // sinon avec la méthode playBytes puisque c'est le format enregistré dans Hive
   void play() async {
     if (player is AudioCache) {
-      if (sound.audioPath != null) {
-        (player as AudioCache).play(sound.audioPath!);
-      } else {
-        (player as AudioCache).playBytes(sound.audioBytes!);
-      }
+      (player as AudioCache).play(sound.audioPath!);
     } else {
-      if (sound.audioPath != null) {
-        await (player as AudioPlayer).play(sound.audioPath!, isLocal: true);
-      } else {
-        await (player as AudioPlayer).playBytes(sound.audioBytes!);
-      }
+      await (player as AudioPlayer).playBytes(sound.audioBytes!);
     }
   }
 
-  Widget actionButton(
-      {required String text,
-      required IconData icon,
-      Color? iconColor,
-      Function()? onPressed}) {
+  // Cette fonction créer un bouton avec les paramètres fournis
+  // ce bouton est déstiné à être utilisé au sein de l'overlay d'actions
+  Widget actionButton({
+    required String text,
+    required IconData icon,
+    Color? iconColor,
+    Function()? onPressed,
+  }) {
     return MaterialButton(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,11 +58,14 @@ class _SoundWidgetState extends State<SoundWidget> {
           Text(
             text,
             style: TextStyle(
+              // Un peu de de calcul pour garder la taille du texte sous controle
+              // selon la taille du widget
               fontSize: 5.5 + widget.size * 0.05,
             ),
           ),
           IconTheme(
             data: IconThemeData(
+              // Si il n'y pas de fonction, donner une apparence inactive à l'icone
               color:
                   onPressed != null ? iconColor ?? Colors.black : Colors.grey,
             ),
@@ -95,6 +93,9 @@ class _SoundWidgetState extends State<SoundWidget> {
 
   void deleteAction() {
     HiveUtils.deleteSound(sound.id!);
+    // Petite astuce pour recharger une page complètement aprês que les données sont mises à jour
+    // cette méthode ordone à l'application de se diriger vers l'écran actuel
+    // tout en supprimant l'historique de navigation afin que revenir en arrière ramène à l'accueil
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute<void>(
@@ -131,9 +132,11 @@ class _SoundWidgetState extends State<SoundWidget> {
       height: widget.size,
       child: AspectRatio(
         aspectRatio: 1,
+        // En utilisant un Stack, le bouton et l'overlay d'action sont superposés
         child: Stack(
           children: [
             ButtonTheme(
+              // S'il n'y a pas d'images utiliser un bouton avec un arrière plan uni
               child: sound.imageBytes == null
                   ? ElevatedButton(
                       onPressed: play,
@@ -151,6 +154,7 @@ class _SoundWidgetState extends State<SoundWidget> {
                         ),
                       ),
                     )
+                  // sinon image en arrière plan
                   : Container(
                       child: MaterialButton(
                         onPressed: play,
@@ -169,9 +173,11 @@ class _SoundWidgetState extends State<SoundWidget> {
                         ),
                       ),
                       decoration: BoxDecoration(
+                        // Simuler le radius par défaut d'ElevatedButton
                         borderRadius:
                             const BorderRadius.all(Radius.circular(3.0)),
                         image: DecorationImage(
+                          // Filtre pour assombrir l'image est amélioré le contraste
                           colorFilter: const ColorFilter.mode(
                             Color.fromARGB(127, 0, 0, 0),
                             BlendMode.darken,
@@ -182,6 +188,7 @@ class _SoundWidgetState extends State<SoundWidget> {
                       ),
                     ),
             ),
+            // L'overlay n'apparait qu'après un appui long
             Visibility(
               visible: actionsVisibility,
               child: Container(
