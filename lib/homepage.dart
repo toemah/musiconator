@@ -60,10 +60,11 @@ class _HomepageState extends State<Homepage> {
                     MaterialStateProperty.all(Colors.greenAccent.shade700),
               ),
               onPressed: () async {
+                String name = _nameController.text;
                 themes.add(
                   SoundTheme(
                     id: HiveUtils.soundThemeBox.length,
-                    name: _nameController.text,
+                    name: name[0].toUpperCase() + name.substring(1).toLowerCase(),
                     isDefault: false,
                     hide: false,
                   ),
@@ -71,7 +72,7 @@ class _HomepageState extends State<Homepage> {
                 themes.sort((a, b) =>
                     a.name.toLowerCase().compareTo(b.name.toLowerCase()));
                 HiveUtils.addTheme(
-                  name: _nameController.text,
+                  name: name[0].toUpperCase() + name.substring(1).toLowerCase(),
                   isDefault: false,
                   hide: false,
                 );
